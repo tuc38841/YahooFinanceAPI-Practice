@@ -27,12 +27,14 @@ def get_financials(financials):
     pricing = financials[0]['price']
     keyStatistics = financials[0]['defaultKeyStatistics']
     financialData = financials[0]['financialData']
+    summary = financials[0]['summaryDetail']
 
     #Company, Current Price, and Earnings
     name = pricing['shortName']
     price = pricing['regularMarketPrice']['raw']
     market_cap = pricing['marketCap']['fmt']
     trailing_EPS = keyStatistics['trailingEps']['raw']
+    trailing_PE = summary['trailingPE']['fmt']
     forward_PE = keyStatistics['forwardPE']['raw']
     peg_ratio = keyStatistics['pegRatio']['raw']
 
@@ -54,9 +56,15 @@ def get_financials(financials):
     current_ratio = financialData['currentRatio']['raw']
     debt_to_equity = financialData['debtToEquity']['raw']
 
+    #Dividends
+    dividend_rate = summary['dividendRate']['raw']
+    dividend_yield = summary['dividendYield']['fmt']
+    five_year_div_yield = summary['fiveYearAvgDividendYield']['fmt']
+
 
 
 get_financials(financials)
+
 
 #Need Following:
 # DefaultKeyStatistics - Book Value, forwardEPS, profitmargins
