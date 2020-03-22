@@ -13,7 +13,7 @@ def value_stock():
 
 #Instantiate Stock object
 stock = Stock(value_stock())
-print(stock.name)
+print(stock.earnings_growth)
 
 
 # Basic - Company, market cap, current price, book value
