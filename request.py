@@ -5,7 +5,7 @@ import os
 headers = {
     'x-rapidapi-host': 'apidojo-yahoo-finance-v1.p.rapidapi.com',
     'X-rapidapi-key': os.environ.get("X_RAPIDAPI_KEY")
-}
+    }
 
 
 financials = []
@@ -19,54 +19,33 @@ def get_stats(stock):
     return financials
 
 def get_financials(financials):
-
     stats_dict = {}
 
-    #response_json keys
+    # response_json keys
     pricing = financials[0]['price']
     key_statistics = financials[0]['defaultKeyStatistics']
     financial_data = financials[0]['financialData']
     summary = financials[0]['summaryDetail']
 
-    #response_json keys list
-    keys_list = [pricing, key_statistics, financial_data, summary]
-    #Stats in each group
+    # Stats in each group
     pricing_stats = ['regularMarketPrice','marketCap']
-    key_statisitics_stats = ['bookValue','priceToBook','beta','trailingEps','forwardEps','forwardPE','pegRatio']
+    key_statistics_stats = ['bookValue','priceToBook','beta','trailingEps','forwardEps','forwardPE','pegRatio']
     financial_data_stats = ['profitMargins','operatingCashflow','totalRevenue','revenueGrowth','targetLowPrice',
                             'targetMedianPrice','targetHighPrice','freeCashflow','freeCashflow','earningsGrowth',
-                            'currentRatio','debtToEquity','returnOnEquity','totalDebt','quickRatio']
+                            'currentRatio','debtToEquity','returnOnEquity', 'totalCash','totalDebt','quickRatio']
     summary_stats = ['dividendRate','dividendYield','fiveYearAvgDividendYield','trailingPE']
 
-    #From Pricing dict
-    for stat in pricing_stats:
-        try:
-            stats_dict[stat] = pricing[stat]['raw']
-        except KeyError:
-            stats_dict[stat] = 'N/A'
+    # Lists of keys and stats
+    keys_list = [pricing, key_statistics, financial_data, summary]
+    stats_list = pricing_stats + key_statistics_stats + financial_data_stats + summary_stats
 
-    #From key_statistics dict
-    for stat in key_statisitics_stats:
-        try:
-            stats_dict[stat] = key_statistics[stat]['raw']
-        except KeyError:
-            stats_dict[stat] = 'N/A'
-
-    #From financial_data dict
-    for stat in financial_data_stats:
-        try:
-            stats_dict[stat] = financial_data[stat]['raw']
-        except KeyError:
-            stats_dict[stat] = 'N/A'
-
-    #From Summary dict
-    for stat in summary_stats:
-        try:
-            stats_dict[stat] = summary[stat]['raw']
-        except KeyError:
-            stats_dict[stat] = 'N/A'
-
+    # Create dict for stats to obtain
+    stats_dict['name'] = pricing['shortName']
+    for key in keys_list:
+        for stat in stats_list:
+            if stat in key.keys():
+                try:
+                    stats_dict[stat] = key[stat]['raw']
+                except KeyError:
+                    stats_dict[stat] = 'N/A'
     return stats_dict
-
-
-#NEED TRY BLOCK OR SOME LOOP TO MONITOR IF FINANCIAL DICT HAS EMPTY KEY VALUE PAIRS

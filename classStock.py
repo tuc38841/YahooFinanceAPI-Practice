@@ -1,13 +1,26 @@
 class Stock:
     def __init__(self, stats_dict):
+        self.name = stats_dict['name']
         self.price = stats_dict['regularMarketPrice']
         self.market_cap = stats_dict['marketCap']
-        self.trailing_EPS = stats_dict['trailingEps']
-        self.trailing_PE = stats_dict['trailingPE']
-        self.forward_PE = stats_dict['forwardPE']
+        try:
+            self.trailing_EPS = stats_dict['trailingEps']
+        except KeyError:
+            self.trailing_EPS = 'N/A'
+        try:
+            self.trailing_PE = stats_dict['trailingPE']
+        except KeyError:
+            self.trailing_PE = 'N/A'
+        try:
+            self.forward_PE = stats_dict['forwardPE']
+        except KeyError:
+            self.forward_PE = 'N/A'
         self.peg_ratio = stats_dict['pegRatio']
         self.book_value = stats_dict['bookValue']
-        self.forward_EPS = stats_dict['forwardEps']
+        try:
+            self.forward_EPS = stats_dict['forwardEps']
+        except KeyError:
+            self.forward_EPS = 'N/A'
         self.price_to_book = stats_dict['priceToBook']
         self.beta = stats_dict['beta']
         self.quick_ratio = stats_dict['quickRatio']
@@ -23,6 +36,7 @@ class Stock:
         self.current_ratio = stats_dict['currentRatio']
         self.debt_to_equity = stats_dict['debtToEquity']
         self.return_on_equity = stats_dict['returnOnEquity']
+        self.total_cash = stats_dict['totalCash']
         self.total_debt = stats_dict['totalDebt']
         self.dividend_rate = stats_dict['dividendRate']
         self.dividend_yield = stats_dict['dividendYield']
