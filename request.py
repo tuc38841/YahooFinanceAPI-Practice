@@ -7,7 +7,6 @@ headers = {
     'X-rapidapi-key': os.environ.get("X_RAPIDAPI_KEY")
     }
 
-
 financials = []
 
 def get_stats(stock):
