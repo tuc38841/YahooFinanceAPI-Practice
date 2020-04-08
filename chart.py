@@ -2,6 +2,7 @@ import requests
 import os
 import json
 import datetime
+from matplotlib import pyplot as plt
 
 def get_chart(stock, range):
     url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-chart"
@@ -19,9 +20,10 @@ def get_chart(stock, range):
                    for epoch in response_json['chart']['result'][0]['timestamp']]
     print(y_axis_price)
     print(x_axis_time)
+    plt.plot(x_axis_time, y_axis_price)
+    plt.xticks(rotation="vertical")
+    plt.show()
 
-
-get_chart('aapl', '1mo')
 
 
 
