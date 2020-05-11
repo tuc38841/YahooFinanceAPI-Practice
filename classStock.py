@@ -16,6 +16,8 @@ class Stock:
         except KeyError:
             self.forward_PE = 'N/A'
         self.peg_ratio = stats_dict['pegRatio']
+        self.shares_outstanding = stats_dict['sharesOutstanding']
+        self.beta = stats_dict['beta']
         self.book_value = stats_dict['bookValue']
         try:
             self.forward_EPS = stats_dict['forwardEps']
@@ -41,3 +43,6 @@ class Stock:
         self.dividend_rate = stats_dict['dividendRate']
         self.dividend_yield = stats_dict['dividendYield']
         self.five_year_div_yield = stats_dict['fiveYearAvgDividendYield']
+        self.cash = stats_dict['cash']
+        self.short_term_investments = stats_dict['shortTermInvestments']
+        self.long_term_investments = stats_dict['longTermInvestments']

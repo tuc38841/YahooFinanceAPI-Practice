@@ -8,8 +8,9 @@ headers = {
     }
 
 financials = []
+balance_sheet = []
 
-def get_stats(stock):
+def get_financials(stock):
     url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-statistics"
     querystring = {"region":"US","symbol": stock.upper()}
     response = requests.request("GET", url, headers=headers, params=querystring)
@@ -17,7 +18,16 @@ def get_stats(stock):
     financials.append(response_json)
     return financials
 
-def get_financials(financials):
+def get_balance_sheet(stock):
+    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-balance-sheet"
+    querystring = {"symbol": stock.upper()}
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    response_json = json.loads(response.text)
+    balance_sheet.append(response_json)
+    return balance_sheet
+
+
+def get_data(financials, balance_sheet):
     stats_dict = {}
 
     # response_json keys
@@ -25,18 +35,21 @@ def get_financials(financials):
     key_statistics = financials[0]['defaultKeyStatistics']
     financial_data = financials[0]['financialData']
     summary = financials[0]['summaryDetail']
+    balance_quarterly = balance_sheet[0]['balanceSheetHistoryQuarterly']['balanceSheetStatements'][0]
 
     # Stats in each group
     pricing_stats = ['regularMarketPrice','marketCap']
-    key_statistics_stats = ['bookValue','priceToBook','beta','trailingEps','forwardEps','forwardPE','pegRatio']
+    key_statistics_stats = ['bookValue','priceToBook','beta','trailingEps','forwardEps','forwardPE','pegRatio',
+                            'sharesOutstanding','beta']
     financial_data_stats = ['profitMargins','operatingCashflow','totalRevenue','revenueGrowth','targetLowPrice',
-                            'targetMedianPrice','targetHighPrice','freeCashflow','freeCashflow','earningsGrowth',
+                            'targetMedianPrice','targetHighPrice','freeCashflow','earningsGrowth',
                             'currentRatio','debtToEquity','returnOnEquity', 'totalCash','totalDebt','quickRatio']
     summary_stats = ['dividendRate','dividendYield','fiveYearAvgDividendYield','trailingPE']
+    balance_stats = ['cash','longTermInvestments','shortTermInvestments',]
 
     # Lists of keys and stats
-    keys_list = [pricing, key_statistics, financial_data, summary]
-    stats_list = pricing_stats + key_statistics_stats + financial_data_stats + summary_stats
+    keys_list = [pricing, key_statistics, financial_data, summary, balance_quarterly]
+    stats_list = pricing_stats + key_statistics_stats + financial_data_stats + summary_stats + balance_stats
 
     # Create dict for stats to obtain
     stats_dict['name'] = pricing['shortName']
@@ -46,5 +59,5 @@ def get_financials(financials):
                 try:
                     stats_dict[stat] = key[stat]['raw']
                 except KeyError:
-                    stats_dict[stat] = 'N/A'
+                    stats_dict[stat] = 0
     return stats_dict
